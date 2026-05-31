@@ -1,0 +1,8 @@
+# Core elliptic curve library (BN128 / alt_bn128, used by Ethereum)
+py_ecc>=8.0.0
+
+# Testing framework
+pytest>=8.0.0
+
+# Standard library modules used (no install needed):
+# hashlib, secrets, dataclasses, typing, json, time, argparse

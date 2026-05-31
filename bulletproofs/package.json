@@ -1,0 +1,18 @@
+{
+  "name": "bulletproofs-range-proof",
+  "version": "1.0.0",
+  "description": "Bulletproof Range Proof — Python implementation + Solidity on-chain verifier",
+  "scripts": {
+    "compile":  "hardhat compile",
+    "test":     "hardhat test",
+    "node":     "hardhat node",
+    "deploy":   "hardhat run scripts/call_verifier.js --network hardhat"
+  },
+  "devDependencies": {
+    "hardhat":             "^2.22.0",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "chai": "^4.3.7",
+    "ethers": "^6.0.0"
+  }
+}
