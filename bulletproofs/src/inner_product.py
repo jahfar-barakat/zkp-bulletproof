@@ -29,7 +29,7 @@ Reference comparison (dalek):
 """
 
 import secrets
-from ec_math import ec_add, ec_mul, multi_exp, ORDER, G, H
+from ec_math import ec_add, ec_mul, multi_exp, ORDER, G, H , U
 from transcript import Transcript
 
 
@@ -121,7 +121,7 @@ def ipa_prove(
     Generate an inner product argument proving <a_vec, b_vec> = c.
 
     The prover knows a_vec and b_vec in full. The verifier only knows
-    the commitments P = <a, G_vec> + <b, H_vec> and c = <a, b>.
+    the commitments P = <a, G_vec> + <b, H_vec> + c * U and c = <a, b>.
 
     This is Figure 1 from the Bulletproofs paper (Bünz et al. 2018).
 
@@ -154,7 +154,7 @@ def ipa_prove(
         G_lo, G_hi = G[:n], G[n:]
         H_lo, H_hi = H[:n], H[n:]
 
-        # L = <a_lo, G_hi> + <b_hi, H_lo>
+        # L = <a_lo, G_hi> + <b_hi, H_lo> + c_L * U
         # (cross commitment: left half of a with right half of G)
         c_L = inner_product(a_lo, b_hi)
         L = multi_exp(a_lo, G_hi)
@@ -162,12 +162,17 @@ def ipa_prove(
         if tmp is not None:
             L = ec_add(L, tmp) if L is not None else tmp
 
-        # R = <a_hi, G_lo> + <b_lo, H_hi>
+        L = ec_add(L, ec_mul(c_L, U))
+
+
+        # R = <a_hi, G_lo> + <b_lo, H_hi> + c_R * U
         c_R = inner_product(a_hi, b_lo)
         R = multi_exp(a_hi, G_lo)
         tmp = multi_exp(b_lo, H_hi)
         if tmp is not None:
             R = ec_add(R, tmp) if R is not None else tmp
+
+        R = ec_add(R, ec_mul(c_R, U))
 
         L_vec.append(L)
         R_vec.append(R)
@@ -257,6 +262,7 @@ def ipa_verify(
     a, b = proof.a, proof.b
 
     expected = ec_add(ec_mul(a, G[0]), ec_mul(b, H[0]))
+    expected = ec_add(expected, ec_mul((a * b) % ORDER, U))
 
     if expected is None or P is None:
         return expected is None and P is None

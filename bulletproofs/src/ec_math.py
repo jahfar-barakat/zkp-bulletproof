@@ -41,6 +41,12 @@ _H_SCALAR = int.from_bytes(
 ) % ORDER
 H = multiply(G1, _H_SCALAR)
 
+_U_SCALAR = int.from_bytes(
+    hashlib.sha256(b"bulletproof_U_generator_v1").digest(),
+    "big"
+) % ORDER
+
+U = multiply(G1, _U_SCALAR)
 
 # ── Basic operations ─────────────────────────────────────────────────────────
 

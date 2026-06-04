@@ -40,7 +40,7 @@ from dataclasses import dataclass, field
 from typing import Optional
 
 from ec_math import (
-    G, H, ec_add, ec_mul, multi_exp, ORDER,
+    G, H,U , ec_add, ec_mul, multi_exp, ORDER,
     get_generator_vector, point_to_bytes,
 )
 from pedersen import commit, vector_commit_no_blinding
@@ -377,6 +377,9 @@ def verify(proof: RangeProof) -> bool:
 
     # Remove blinding: P' = P - mu*H
     P = ec_add(P, ec_mul((-mu) % ORDER, H))
+
+    # Add inner-product binding term
+    P = ec_add(P, ec_mul(t_hat, U))
 
     # ── Verify IPA ────────────────────────────────────────────────────
     t.append_scalar(b"tau_x", tau_x)
