@@ -135,8 +135,8 @@ def export_for_solidity(proof) -> dict:
 
         "L_vec": [[str(int(p)) for p in point_to_pair(L)] for L in proof.ipa.L_vec],
         "R_vec": [[str(int(p)) for p in point_to_pair(R)] for R in proof.ipa.R_vec],
-        "ipa_a": str(proof.ipa.a),
-        "ipa_b": str(proof.ipa.b),
+        "ipa_a": int(proof.ipa.a),
+        "ipa_b": int(proof.ipa.b),
 
         "challenge_y": str(y),
         "challenge_z": str(z),
@@ -145,9 +145,9 @@ def export_for_solidity(proof) -> dict:
         "z2":    str(z2),
         "x2":    str(x2),
 
-        "P_final": [str(int(p)) for p in point_to_pair(P_fold)],
-        "G_final": [str(int(p)) for p in point_to_pair(G_final)],
-        "H_final": [str(int(p)) for p in point_to_pair(H_final)],
+        "P_final": [int(p) for p in point_to_pair(P_fold)],
+        "G_final": [int(p) for p in point_to_pair(G_final)],
+        "H_final": [int(p) for p in point_to_pair(H_final)],
 
         "G_vec":   [[str(int(p)) for p in point_to_pair(pt)] for pt in G_vec],
         "H_prime": [[str(int(p)) for p in point_to_pair(pt)] for pt in H_prime],
@@ -181,3 +181,4 @@ if __name__ == "__main__":
         json.dump(data, f, indent=2)
     print(f"[export_proof] Written to: {args.output}")
     print(f"[export_proof] Ready for: npx hardhat run scripts/call_verifier.js")
+
